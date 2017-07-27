@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>  <head>    <title>FORM</title>    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>    <script src="http://cdnjs.cloudflare.com/ajax/libs/jStorage/0.4.12/jstorage.min.js"> </script>	<style>  body {    margin: 80px 80px 80px 80px;    padding: 20px 100px 20px 100px;    text-align: center;    border:60px 60px 60px 60px;    border-color: black;    background-color:	#c2d6d3}input{  border-radius: 8px 8px 8px 8px;  box-shadow:2px 0px 2px 0px;  margin:10px 10px 10px10px ;padding: 10px 20px 10px 20px;  backgrounf-color: #47525E;  font-family: cursive;}button{   button-align:center;   background-color: #a8f9ed;   color: black;   font-family: cursive;   border-radius: 8px 8px 8px 8px;   box-shadow:2px 0px 2px 0px;   margin:10px 10px 10px 10px ;   padding: 10px 50px 10px 50px;   font-size: 20px;}	table {   border: 1px solid black;   width:50%;   table-align:center;}th {   border: 1px solid black;   height:50px;}td {   border: 1px solid black;   height:25px;   padding:5px;}tr:nth-child(even){background-color: #c2d6d3}tr:nth-child(odd){background-color: #a8f9ed}	</style>
+  </head>  <body><form action=#>    <h2>REGISTRATION FORM</h2><div>  UID : <input id="eID" type="number" ></input></div><div>  Name : <input id="eName" type="text" ></input></div>
+<div>
+  DOB :<input id="eDate" type="date"></input>
+</div><div>  Select city : <select id="city">  <option value="Mumbai">Mumbai</option>  <option value="Nashik">Nashik</option>  <option value="Pune">Pune</option>  <option value="Aurangabad">Aurangabad</option></select></div>
+<div>
+   <button id="addButton">Add</button>   </div>   <div>     <button id="Reset" value="reset">reset</button>   </div> </form>
+ <!--table-->
+ <table id="savedRecords">  <tr id="0">
+    <th>UID</th>    <th>Name</th>    <th>DOB</th>    <th>city</th>   	<th>Delete</th>
+    <th>Edit</th>
+  </tr></table>  </body>  <script>  var savedRecordsArray=[];  //var count;  var xid=1;  var edit=true;  var cid;  var initialize=function(){  //count=0;  $("#addButton").on("click",addRecord);	loadSavedRecords();  };
+  var addRecord=function(event){  //add to table  if(edit){  console.log("entered ADD function");    var enteredUID=document.getElementById('eID').value;  var enteredname=document.getElementById('eName').value;  var bdate=document.getElementById('eDate').value;  var e = document.getElementById("city");  var enteredcity = e.options[e.selectedIndex].text;
+  var record=[bdate,enteredUID,enteredname,enteredcity];
+  showRecord(record);  xid=xid+1;  savedRecordsArray.push(record);  save();  return false;}
+if(!edit){  edit=true;  console.log("entered Add2 function");  var eenteredUID=document.getElementById('eID').value;  var eenteredname=document.getElementById('eName').value;  var ebdate=document.getElementById('eDate').value;  var ee = document.getElementById("city");  var eenteredcity = ee.options[ee.selectedIndex].text;
+  document.getElementById("savedRecords").rows[cid].cells[1].innerHTML=eenteredUID;
+  document.getElementById("savedRecords").rows[cid].cells[2].innerHTML=eenteredname;  document.getElementById("savedRecords").rows[cid].cells[0].innerHTML=ebdate;  document.getElementById("savedRecords").rows[cid].cells[3].innerHTML=eenteredcity;  save();
+}        return false;
+  };
+  var save = function()    {        console.log("entered Save function");        $.jStorage.set("savedRecords", savedRecordsArray );    };
+	var loadSavedRecords = function()  {        savedRecordsArray = $.jStorage.get("savedRecords") || [] ;        for( let index=0 ; index<savedRecordsArray.length ; ++index )        {            showRecord( savedRecordsArray[index] );        }  };var showRecord = function(record){        //this line creates a new dom element        //cid++;  var recordTemplate = $(`<tr id="${xid++}"><td>${record[0]}</td><td>${record[1]}</td><td>${record[2]}</td><td>${record[3]}</td><td><button class="clearRow">Delete</button></td><td><button class="editRow">Edit</button></td></tr>`);        $("#savedRecords").append(recordTemplate);        save();};
+	$('#savedRecords').on('click', '.clearRow', function(e)  {      console.log("del function yahooo");    $(this).closest("tr").remove()    savedRecordsArray.pop("tr");    save();  });
+//console.log("out")
+ $('#savedRecords').on('click', '.editRow', function(e) {		console.log("side");		cid=$(this).closest("tr").attr('id');
+	   $("#eName").val(document.getElementById("savedRecords").rows[cid].cells[2].innerHTML)
+	   $("#eID").val(document.getElementById("savedRecords").rows[cid].cells[1].innerHTML)
+     $("#eDate").val(document.getElementById("savedRecords").rows[cid].cells[0].innerHTML)
+     $("#city").val(document.getElementById("savedRecords").rows[cid].cells[3].innerHTML).change()
+save();
+	   edit=false;  });//console.log("df");
+	     $(document).ready(initialize);
+  </script></html>
